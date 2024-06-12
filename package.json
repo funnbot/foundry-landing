@@ -1,0 +1,88 @@
+{
+    "name": "foundry-landing-site",
+    "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/funnbot/foundry-landing-site.git"
+    },
+    "author": "Funnbot",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/funnbot/foundry-landing-site/issues"
+    },
+    "homepage": "https://github.com/funnbot/foundry-landing-site#readme",
+    "description": "",
+    "scripts": {
+        "clean:build": "rimraf -- ./dist/legacy ./dist/modern ./.parcel-cache/build",
+        "clean:serve": "rimraf -- ./dist/dev ./.parcel-cache/serve",
+        "serve": "npm run clean:serve && parcel serve --target dev --cache-dir ./.parcel-cache/serve --dist-dir ./dist/dev",
+        "build": "npm run clean:build && parcel build --target modern --target legacy --no-cache --cache-dir ./.parcel-cache/build --log-level verbose",
+        "bundle-buddy": "BUNDLE_BUDDY=true npm run build"
+    },
+    "dependencies": {
+        "@types/ffi-napi": "^4.0.10",
+        "htm": "^3.1.1",
+        "preact": "^10.22.0"
+    },
+    "devDependencies": {
+        "@parcel/macros": "^2.12.0",
+        "@parcel/packager-raw-url": "^2.12.0",
+        "@parcel/rust": "^2.12.0",
+        "@parcel/transformer-jsonld": "^2.12.0",
+        "@parcel/transformer-sass": "^2.12.0",
+        "@parcel/validator-typescript": "^2.12.0",
+        "@types/node": "^20.14.0",
+        "parcel": "^2.12.0",
+        "parcel-reporter-static-files-copy": "^1.5.3",
+        "rimraf": "^5.0.7",
+        "stylelint-config-sass-guidelines": "^11.1.0",
+        "typescript": "^5.4.5"
+    },
+    "targets": {
+        "modern": {
+            "source": "./src/index.html",
+            "context": "browser",
+            "distDir": "./dist/modern",
+            "engines": {
+                "browsers": [
+                    "last 1 versions and not dead and fully supports es6-module"
+                ]
+            }
+        },
+        "legacy": {
+            "source": "./src/index.html",
+            "context": "browser",
+            "distDir": "./dist/legacy",
+            "engines": {
+                "browsers": [
+                    "defaults"
+                ]
+            }
+        },
+        "dev": {
+            "source": "./src/index.html",
+            "context": "browser",
+            "distDir": "./dist/dev",
+            "engines": {
+                "browsers": [
+                    "last 1 edge versions"
+                ]
+            }
+        }
+    },
+    "staticFiles": {
+        "staticPath": "./public"
+    },
+    "alias": {
+        "react": "preact/compat",
+        "react-dom/test-utils": "preact/test-utils",
+        "react-dom": "preact/compat",
+        "react/jsx-runtime": "preact/jsx-runtime",
+        "preact/jsx-dev-runtime": "preact/jsx-runtime"
+    },
+    "@parcel/transformer-css": {
+        "cssModules": {
+            "dashedIdents": true
+        }
+    }
+}

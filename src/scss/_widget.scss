@@ -1,0 +1,45 @@
+@use "theme";
+
+@mixin surface($idx: 1) {
+    @include theme.get(surface, $idx) using ($bg, $c) {
+        background-color: $bg;
+        color: $c;
+    }
+}
+
+@mixin component($idx: 1) {
+    @include theme.get(accent, $idx) using ($bg, $c) {
+        background-color: $bg;
+        color: $c;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+
+        @include theme.get(accent, $idx) using ($bg, $c) {
+            background-color: theme.disabled($bg);
+            color: theme.disabled($c);
+        }
+    }
+}
+
+/// @param number idx - The index of the accent color to use.
+@mixin control($idx: 1) {
+    @include component($idx);
+
+    cursor: pointer;
+
+    &:not([disabled]):hover {
+        @include theme.get(accent, $idx) using ($bg, $c) {
+            background-color: theme.hover($bg);
+            color: $c;
+        }
+    }
+
+    &:not([disabled]):active {
+        @include theme.get(accent, $idx) using ($bg, $c) {
+            background-color: theme.active($bg);
+            color: $c;
+        }
+    }
+}

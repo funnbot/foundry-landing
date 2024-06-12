@@ -1,0 +1,71 @@
+// _theme.scss
+
+@use "sass:map";
+@use "sass:color";
+
+// oklch(lightness, chroma, hue [, alpha])
+// lightness: 0% - 100%, lightness is the brightness of the color
+// chroma: 0 - 0.37, from gray to the most saturated color
+// hue: 0 - 360, hue is the color itself as an angle
+// alpha: 0.00 - 1.00 or 0% - 100%, alpha is the transparency of the color
+
+:root {
+    color-scheme: light dark;
+}
+
+$content-on-light: #000;
+$content-on-dark: #FFF;
+
+$light-theme: (
+    "surface-0": rgb(211, 211, 211),
+    "surface-1": lightblue,
+    "accent-0": orange,
+    "accent-1": blue,
+);
+
+$dark-theme: (
+    "surface-0": #202433,
+    "surface-1": darkblue,
+    "accent-0": #8e4e01,
+    "accent-1": #5252ff,
+);
+
+@mixin get($color-name: surface, $color-idx: 1) {
+    $light-value: map.get($light-theme, #{$color-name}-#{$color-idx});
+
+    $light-content-value: $content-on-light;
+    @if color.lightness($light-value) < 50 {
+        $light-content-value: $content-on-dark;
+    }
+    
+    @content ($light-value, $light-content-value);
+
+    @media (prefers-color-scheme: dark) {
+        $dark-value: map.get($dark-theme, #{$color-name}-#{$color-idx});
+
+        $dark-content-value: $content-on-light;
+        @if color.lightness($light-value) < 50 {
+            $dark-content-value: $content-on-dark;
+        }
+
+        @content ($dark-value, $dark-content-value);
+    }
+}
+
+@mixin set($property, $color-name: surface, $color-idx: 1) {
+    #{$property}: map.get($light-theme, #{$color-name}-#{$color-idx});
+
+    @media (prefers-color-scheme: dark) {
+        #{$property}: map.get($dark-theme, #{$color-name}-#{$color-idx});
+    }
+}
+
+@function disabled($color) {
+    @return oklch(from $color l calc(c - 0.05) h);
+}
+@function hover($color) {
+    @return oklch(from $color l calc(c + 0.05) h);
+}
+@function active($color) {
+    @return oklch(from $color calc(l + 10%) c h);
+}
